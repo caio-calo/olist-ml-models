@@ -27,7 +27,7 @@ ORDER BY 1 DESC),
 tb_pagamentos AS ( 
 SELECT idVendedor,
 
---volume
+-- Volume de pedidos
 sum(CASE WHEN descTipoPagamento = 'boleto' then qtPedidoMeioPagamento else 0 end) as qtBoleto,
 sum(CASE WHEN descTipoPagamento = 'credit_card' then qtPedidoMeioPagamento else 0 end) as qtCartao,
 sum(CASE WHEN descTipoPagamento = 'voucher' then qtPedidoMeioPagamento else 0 end) as qtVoucher,
@@ -38,7 +38,7 @@ sum(CASE WHEN descTipoPagamento = 'credit_card' then qtPedidoMeioPagamento else 
 sum(CASE WHEN descTipoPagamento = 'voucher' then qtPedidoMeioPagamento else 0 end)/sum(qtPedidoMeioPagamento) as prop_qtVoucher,
 sum(CASE WHEN descTipoPagamento = 'debit_card' then qtPedidoMeioPagamento else 0 end)/sum(qtPedidoMeioPagamento) as prop_qtDebito,
 
---valor
+--Valor dos pedidos
 sum(CASE WHEN descTipoPagamento = 'boleto' then PagamentoTotal else 0 end) as vlBoleto,
 sum(CASE WHEN descTipoPagamento = 'credit_card' then PagamentoTotal else 0 end) as vlCartao,
 sum(CASE WHEN descTipoPagamento = 'voucher' then PagamentoTotal else 0 end) as vlVoucher,
@@ -55,6 +55,7 @@ FROM tb_group
 GROUP BY 1
 ),
 
+--Variáveis de crédito
 tb_cartao as (
 SELECT idVendedor, avg(nrParcelas) AS avgNrParcelas, percentile(nrParcelas, 0.5 ) as medianNrParcelas, min(nrParcelas) AS minNrParcelas, max(nrParcelas) AS maxNrParcelas 
 FROM tb_join
@@ -62,6 +63,7 @@ WHERE descTipoPagamento = 'credit_card'
 GROUP BY idVendedor
 )
 
+--Tabela final com referência
 SELECT '2018-01-01' as dtRef,
       t1.*,
       t2.avgNrParcelas,
