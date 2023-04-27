@@ -13,6 +13,7 @@ ON t1.idPedido = t2.idPedido
 
 LEFT JOIN silver.olist.cliente as t3
 ON t1.idCliente=t3.idCliente
+
 --intervalo de observação
 WHERE t1.dtPedido < '2018-01-01'
 AND t1.dtPedido >= add_months('2018-01-01', -6)
@@ -49,11 +50,6 @@ SUM(CASE WHEN descUF ='TO' THEN '1' ELSE '0' END)/COUNT((descUF)) AS pctEntregaT
 FROM tb_entrega
 GROUP BY idVendedor
 
-
--- COMMAND ----------
-
-SELECT *
-FROM silver.olist.pedido as t1
 
 -- COMMAND ----------
 
