@@ -1,25 +1,27 @@
 -- Databricks notebook source
-WITH tb_join as (
-SELECT t2.*,
+WITH tb_join AS (
+SELECT 
+      t2.*,
       t3.idVendedor 
 
-FROM silver.olist.pedido as t1
+FROM silver.olist.pedido AS t1
 
-LEFT JOIN silver.olist.pagamento_pedido as t2
+LEFT JOIN silver.olist.pagamento_pedido AS t2
 ON t1.idPedido = t2.idPedido
 
-LEFT JOIN silver.olist.item_pedido as t3
+LEFT JOIN silver.olist.item_pedido AS t3
 ON t1.idPedido = t3.idPedido
 
 --intervalo de observação
-WHERE t1.dtPedido < '2018-01-01'
-AND t1.dtPedido >= add_months('2018-01-01', -6)
+WHERE 
+      t1.dtPedido < '2018-01-01'
+      AND t1.dtPedido >= add_months('2018-01-01', -6)
 ),
 
-tb_group as (select idVendedor,
+tb_group AS (select idVendedor,
        descTipoPagamento,
-       count(distinct descTipoPagamento) as qtPedidoMeioPagamento,
-       sum(vlPagamento) as PagamentoTotal
+       count(distinct descTipoPagamento) AS qtPedidoMeioPagamento,
+       sum(vlPagamento) AS PagamentoTotal
 FROM tb_join
 
 GROUP BY 1,2 
@@ -57,8 +59,13 @@ GROUP BY 1
 ),
 
 --Variáveis de crédito
-tb_cartao as (
-SELECT idVendedor, avg(nrParcelas) AS avgNrParcelas, percentile(nrParcelas, 0.5 ) as medianNrParcelas, min(nrParcelas) AS minNrParcelas, max(nrParcelas) AS maxNrParcelas 
+tb_cartao AS (
+SELECT 
+      idVendedor, 
+      avg(nrParcelas) AS avgNrParcelas, 
+      percentile(nrParcelas, 0.5 ) as medianNrParcelas, 
+      min(nrParcelas) AS minNrParcelas, 
+      max(nrParcelas) AS maxNrParcelas 
 FROM tb_join
 WHERE descTipoPagamento = 'credit_card'
 GROUP BY idVendedor
