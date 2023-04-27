@@ -21,6 +21,7 @@ AND t1.dtPedido >= add_months('2018-01-01', -6)
 
 tb_resumo AS 
 (SELECT DISTINCT idVendedor,
+COUNT(DISTINCT(descUF)) AS qtdUFs,
   SUM(CASE WHEN descUF ='AC' THEN '1' ELSE '0' END)/COUNT((descUF)) AS pctEntregaAC,
   SUM(CASE WHEN descUF ='AL' THEN '1' ELSE '0' END)/COUNT((descUF)) AS pctEntregaAL,
   SUM(CASE WHEN descUF ='AM' THEN '1' ELSE '0' END)/COUNT((descUF)) AS pctEntregaAM,
