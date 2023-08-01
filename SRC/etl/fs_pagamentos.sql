@@ -82,3 +82,5 @@ FROM tb_pagamentos as t1
 
 LEFT JOIN tb_cartao as t2
 ON t1.idVendedor = t2.idVendedor
+
+
